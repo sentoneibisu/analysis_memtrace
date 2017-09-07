@@ -19,5 +19,6 @@
 $ gcc -DUSE_TRANSACTION -Wall -o cparse_memtrace cparse_memtrace.c -lsqlite3 -L /usr/lib/x86_64-linux-gnu/
 ```
 -Lの後はlibsqlite3.soの場所を指定
+なぜか-lsqlite3を後ろに書かないとコンパイルエラーになる．
 
 
