@@ -4,22 +4,7 @@ import sqlite3
 import pickle
 import datetime
 from tqdm import tqdm
-
-def log(*args):
-    msg = ' '.join(map(str, [datetime.datetime.now(), '>'] + list(args)))
-    with open('log.txt', 'a') as f:
-        f.write(msg + '\n')
-
-
-def open_db():
-    conn = sqlite3.connect('memref.db', isolation_level=None)
-    cur = conn.cursor()
-    return (conn, cur)
-
-
-def close_db(conn):
-    conn.close() 
-
+from util import log, open_db, close_db
 
 def debug(pc_aggr):
     log('len(pc_aggr):', len(pc_aggr))
@@ -133,6 +118,7 @@ def grouping(cur, pc_aggr, threshold):
     return all_groups
 
 def Main():
+    log('[+]', sys.argv[0])
     try:
         conn, cur = open_db()
         # pcごとに数を集計
