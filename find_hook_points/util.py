@@ -8,8 +8,11 @@ def log(*args):
     with open('log.txt', 'a') as f:
         f.write(msg + '\n')
 
-def open_db(dbname='memref.db'):
-    conn = sqlite3.connect(dbname, isolation_level=None)
+def open_db(dbname='memref.db', use_autocommit=True):
+    if use_autocommit:
+        conn = sqlite3.connect(dbname, isolation_level=None)
+    else:
+        conn = sqlite3.connect(dbname)
     cur = conn.cursor()
     return (conn, cur)
 
