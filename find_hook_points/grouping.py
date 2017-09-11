@@ -15,10 +15,7 @@ def debug(pc_aggr):
 
 
 def filter_pc(pc_aggr, threshold):
-    filtered_pc_aggr = {}
-    for x in pc_aggr:
-        if pc_aggr[x] > threshold:
-            filtered_pc_aggr[x] = pc_aggr[x]
+    filtered_pc_aggr = dict(filter(lambda x: x[1] > threshold, pc_aggr.items()))
     log('len(filtered_pc_aggr):', len(filtered_pc_aggr))
     return filtered_pc_aggr
 
