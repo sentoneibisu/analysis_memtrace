@@ -3,6 +3,7 @@
 import sqlite3
 import pickle
 import datetime
+from collections import defaultdict
 from tqdm import tqdm
 from util import log, open_db, close_db
 
@@ -28,7 +29,7 @@ def aggregate_pc(cur):
                0x77ff4324: 2, 0x5322fa34: 105, 0x77aa00bf: 7, 
                0x77ff4325: 8, 0x5322fa35: 103, 0x77aa00c0: 9, ...}
     """
-    pc_aggr = {}
+    pc_aggr = defaultdict(int)
     i = 1
     while True:
         cur.execute("select id, pc, addr from memrefs where id >= (?) and id <= (?)", (i, i + 10000) )
@@ -38,10 +39,7 @@ def aggregate_pc(cur):
             break
         for id, pc, addr in fetch_list:
             print "%d,0x%08x,0x%08x" % (id, pc, addr)
-            if pc not in pc_aggr:
-                pc_aggr[pc] = 1
-            else:
-                pc_aggr[pc] += 1
+            pc_aggr[pc] += 1
     return pc_aggr
 
 
