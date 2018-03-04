@@ -14,6 +14,8 @@ $ ./cparse_memtrace memtrace.AcroRd32.exe.*****.0000.log 0
     .
     .
 
+ [Ctrl-C]
+
 $ sqlite3 memref.db
 sqlite> select count(*) from memrefs;
 20000000
@@ -23,6 +25,10 @@ $ ./cparse_memtrace memtrace.AcroRd32.exe.*****.0000.log 20000000
     .
     .
     .
+
+ [Ctrl-C]
+# cparse_memtraceを動かし続けていると途中で重くなって落ちる(Ctrl-Cで落とすべき)。そのため、途中結果をsqliteで確認して、再び途中から再開する。
+
 # 入力: 空のmemref.db, memtraceログ
 # 出力: パース完了後のmemref.db
 ```
@@ -31,6 +37,7 @@ $ ./cparse_memtrace memtrace.AcroRd32.exe.*****.0000.log 20000000
 ```bash
 $ sqlite3 memref.db
 sqlite> CREATE INDEX pcindex on memrefs(pc);
+sqlite> select * from sqlite_master; #確認
 ```
 
 - メモリアクセスのグルーピングとJS文字列の探索
@@ -50,12 +57,13 @@ $ python parse_functrace.py functrace.AcroRd32.exe*****.0000.log
 
 $ python search_js.py
 # 必要に応じてsearch_js.py内でHard Codeしている探索対象のJS文字列を変更する
-# 入力: group.pickle, functrace.db
+# 入力: group.pickle
 # 出力: JS文字列を含んだメモリ領域の先頭周辺アドレス群(log.txtに出力される)
 
-$ python enum_candidate_rvas.py
+$ python enum_candidate_rvas.py load_module_info_*****.txt
 # 実行前にソースコード内のtarget_mem_addrsを上で得られたアドレス群に書き換える(適宜範囲を広げる)
 # 入力: functrace.db, load_module_info_*****.txt
+# 出力: 候補関数リスト(標準出力)
 ```
 
 - その他のユーティリティー (./util)
